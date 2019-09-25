@@ -796,7 +796,8 @@ def remove_bad_pressure(profile):
         if ii > len(pres2):
             break
     if skip:
-        skip = pres_ii[skip]
+        skip = pres_ii[skip][-1] + 1
+        skip = np.arange(skip)
         keep_iis = np.setxor1d(skip, list(range(len(pres))))
     else:
         keep_iis = list(range(len(pres)))
