@@ -780,3 +780,26 @@ def o2_s_and_p_comp(dba, o2sensor='sci_oxy4_oxygen'):
     dba.add_data(oxygen)
 
     return dba
+
+
+def remove_bad_pressure(profile):
+    pres = profile.getdata('llat_pressure')
+    time_ = profile.getdata('llat_time')
+    pres_ii = np.flatnonzero(np.isfinite(pres))
+    pres2 = pres[pres_ii]
+    time2 = time_[pres_ii]
+    ii = 0
+    skip = []
+    while pres2.min() != pres2[ii]:
+        skip.append(ii)
+        ii += 1
+        if ii > len(pres2):
+            break
+    if skip:
+        skip = pres_ii[skip]
+        keep_iis = np.setxor1d(skip, list(range(len(pres))))
+    else:
+        keep_iis = list(range(len(pres)))
+
+    new_profile = profile.slicedata(indices=keep_iis)
+    return new_profile

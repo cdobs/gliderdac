@@ -318,6 +318,7 @@ def main(args):
         # %------ Write Profiles to NetCDF ------%
         for profile in profiles:
             profile = processing.reduce_to_sci_data(profile)
+            profile = processing.remove_bad_pressure(profile)
             # ToDo: fix the history writer in NetCDFWriter
             out_nc_file = ncw.write_profile(profile, scalars)
             if out_nc_file:  # can be None if skipping
